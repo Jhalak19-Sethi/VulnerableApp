@@ -4,16 +4,17 @@ function initPhishing() {
   var mailList = document.getElementById("mailList");
   var previewSubject = document.getElementById("mailPreviewSubject");
   var previewBody = document.getElementById("mailPreviewBody");
-  
+
   // Diagnostic log
   console.log("=== PHISHING PAGE LOADED ===");
   console.log("mailList element found:", !!mailList);
   console.log("previewSubject element found:", !!previewSubject);
   console.log("previewBody element found:", !!previewBody);
-  
+
   if (!mailList) {
     console.error("CRITICAL: mailList element not found!");
-    if (previewBody) previewBody.textContent = "ERROR: mailList element not found in HTML";
+    if (previewBody)
+      previewBody.textContent = "ERROR: mailList element not found in HTML";
     return;
   }
 
@@ -22,21 +23,31 @@ function initPhishing() {
     var replacedText, replacePattern1, replacePattern2, replacePattern3;
 
     //URLs starting with http://, https://, or ftp://
-    replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
-    replacedText = inputText.replace(replacePattern1, '<a href="$1" target="_blank">$1</a>');
+    replacePattern1 =
+      /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
+    replacedText = inputText.replace(
+      replacePattern1,
+      '<a href="$1" target="_blank">$1</a>'
+    );
 
     //URLs starting with "www." (without // before it, or it'd re-link the ones done above).
     replacePattern2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
-    replacedText = replacedText.replace(replacePattern2, '$1<a href="http://$2" target="_blank">$2</a>');
+    replacedText = replacedText.replace(
+      replacePattern2,
+      '$1<a href="http://$2" target="_blank">$2</a>'
+    );
 
     //Change email addresses to mailto:: links.
-    replacePattern3 = /(([a-zA-Z0-9\-\_\.])+@[a-zA-Z\_]+?(\.[a-zA-Z]{2,6})+)/gim;
-    replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>');
+    replacePattern3 =
+      /(([a-zA-Z0-9\-\_\.])+@[a-zA-Z\_]+?(\.[a-zA-Z]{2,6})+)/gim;
+    replacedText = replacedText.replace(
+      replacePattern3,
+      '<a href="mailto:$1">$1</a>'
+    );
 
     return replacedText;
   }
 
-  
   var selectedMailId = localStorage.getItem("selectedMailId");
 
   // Initial mail contents
@@ -44,20 +55,17 @@ function initPhishing() {
     {
       subject: "[Action Required] Your account has been updated",
       sender: "acme@support.com",
-      body:
-        "Hi there,\n\nWe have updated your account settings. Please review the details and confirm your login information to avoid interruption.\n\nThanks,\nSupport Team",
+      body: "Hi there,\n\nWe have updated your account settings. Please review the details and confirm your login information to avoid interruption.\n\nThanks,\nSupport Team",
     },
     {
       subject: "Invoice attached for your recent purchase",
       sender: "billing@tvshow.com",
-      body:
-        "Dear Customer,\n\nYour invoice for the recent subscription payment is attached. Please open the link to verify the transaction and download your receipt.\n\nBest regards,\nBilling Department",
+      body: "Dear Customer,\n\nYour invoice for the recent subscription payment is attached. Please open the link to verify the transaction and download your receipt.\n\nBest regards,\nBilling Department",
     },
     {
       subject: "Urgent security alert: verify your mailbox now",
       sender: "security@company.com",
-      body:
-        "Hello,\n\nWe detected unusual activity on your account. Click the verification link immediately to secure your mailbox and prevent unauthorized access.\n\nSecurity Team",
+      body: "Hello,\n\nWe detected unusual activity on your account. Click the verification link immediately to secure your mailbox and prevent unauthorized access.\n\nSecurity Team",
     },
   ];
 
